@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Import data
-df = pd.read_csv('medical_examiation.csv')
+df = pd.read_csv('medical_examination.csv')
 
 # Add 'overweight' column
 df['overweight'] = (df['weight'] / (df['height']/100)**2 > 25).astype(int)
@@ -17,17 +17,19 @@ df['gluc'] = (df['gluc'] > 1).astype(int)
 # Draw Categorical Plot
 def draw_cat_plot():
     # Create DataFrame for cat plot using `pd.melt` using just the values from 'cholesterol', 'gluc', 'smoke', 'alco', 'active', and 'overweight'.
-    df_cat = None
+    df_cat = pd.melt(df, id_vars=['cardio'], value_vars=['active','alco','cholesterol','gluc','overweight','smoke'])
 
 
     # Group and reformat the data to split it by 'cardio'. Show the counts of each feature. You will have to rename one of the collumns for the catplot to work correctly.
-    df_cat = None
+    df_cat_groups = df_cat.groupby(['cardio','variable','value']).size().to_frame(name='total')
 
     # Draw the catplot with 'sns.catplot()'
-
-
+    fig = sns.catplot(data=df_cat,kind='count',x='variable',hue='value',col='cardio',)
+    fig.axes[0,0].set_ylabel('total')
+    fig.axes[0,1].set_ylabel('total')
 
     # Do not modify the next two lines
+    #print('saving plot')
     fig.savefig('catplot.png')
     return fig
 
