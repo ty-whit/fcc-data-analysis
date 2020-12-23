@@ -37,21 +37,31 @@ def draw_cat_plot():
 # Draw Heat Map
 def draw_heat_map():
     # Clean the data
-    df_heat = None
+    # remove bad blood pressure readings
+    cond1 = df['ap_lo']<=df['ap_hi']
+    # Only keep height between 2.5% - 97.5%
+    cond2 = df['height'] >= df['height'].quantile(0.025)
+    cond3 = df['height'] <= df['height'].quantile(0.975)
+    # Only keep weight between 2.5% - 97.5%
+    cond4 = df['weight'] >= df['weight'].quantile(0.025)
+    cond5 = df['weight'] <= df['weight'].quantile(0.975)
+    cond  = cond1 & cond2 & cond3 & cond4 & cond5
+    
+    df_heat = df[cond]
 
     # Calculate the correlation matrix
-    corr = None
+    corr = df_heat.corr()
 
     # Generate a mask for the upper triangle
-    mask = None
-
-
+    cond = np.triu(np.ones([14,14]))
+    cond = (cond == 1)
+    mask = corr.mask(cond)
 
     # Set up the matplotlib figure
-    fig, ax = None
-
+    fig, ax = plt.subplots(figsize=(11, 9))
+ 
     # Draw the heatmap with 'sns.heatmap()'
-
+    sns.heatmap(mask, annot=True, fmt='.1f', square=True, linewidth=1, linecolor='white')
 
 
     # Do not modify the next two lines
