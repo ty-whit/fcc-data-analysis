@@ -28,14 +28,18 @@ def draw_line_plot():
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
+    df_bar = df.copy()
+    df_bar['month'] = df_bar.index.month
+    df_bar['month_name'] = pd.to_datetime(df_bar.month, format='%m').dt.month_name()
+    df_bar['year'] = df_bar.index.year
+    df_bar_grouped = df_bar.groupby(['year', 'month']).sum()
 
     # Draw bar plot
-
-
-
-
-
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    fig = sns.catplot(data=df_bar, x='year', y='value', hue='month', kind='bar', ci=None, legend=False)
+    fig.axes[0, 0].legend(months, loc='upper left')
+    fig.set_ylabels('Average Page Views')
+    fig.set_xlabels('Years')
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
     return fig
