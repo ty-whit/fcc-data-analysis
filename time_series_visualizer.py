@@ -64,7 +64,6 @@ def draw_box_plot():
     fig.axes[1].set_title('Month-wise Box Plot (Seasonality)')
     fig.axes[1].set_xlabel('Month')
     fig.axes[1].set_ylabel('Page Views')
-    plt.show()
 
     # Save image and return fig (don't change this part)
     fig.savefig('box_plot.png')
